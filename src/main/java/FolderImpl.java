@@ -26,7 +26,6 @@ public class FolderImpl implements Folder {
         FileUtils.copyFileToDirectory(file.getFile(), folder);
     }
 
-
     public Folder getChildFolder(String folderName) {
 
         java.io.File childFolder = new java.io.File(this.folder.getPath() + java.io.File.separator + folderName);
@@ -34,5 +33,10 @@ public class FolderImpl implements Folder {
             childFolder.mkdir();
         }
         return new FolderImpl(childFolder);
+    }
+
+    @Override
+    public String getPath() {
+        return this.folder.getPath();
     }
 }

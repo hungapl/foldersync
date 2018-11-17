@@ -12,11 +12,11 @@ public class File {
     }
 
     public boolean isSameLength(File anotherFile) {
-        return this.name == anotherFile.name && this.length == anotherFile.length;
+        return this.length == anotherFile.length;
     }
 
     public boolean isSameName(File anotherFile) {
-        return this.name == anotherFile.name;
+        return this.name.equals(anotherFile.name);
     }
 
     public java.io.File getFile() {

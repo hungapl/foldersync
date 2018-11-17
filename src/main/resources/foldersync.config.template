@@ -1,0 +1,6 @@
+# Source directory on device
+sourceDirectory=/home/current_user/mpt_mounted/DCIM/Camera/
+# Destination directory on disk
+destinationDirectory=/home/current_user/photos
+# Create a new directory for every sync
+createNewFolder=true

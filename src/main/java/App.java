@@ -24,13 +24,20 @@ public class App {
             App app = new App();
             if (!cmd.hasOption(OPTION_CONFIG)) {
                 formatter.printHelp("ant", options);
+                return;
             }
             boolean verbose = new Boolean(cmd.getOptionValue(OPTION_VERBOSE));
+            verbose = true;
             String configFilePath = cmd.getOptionValue(OPTION_CONFIG);
+            configFilePath = "/home/hungap/personal/photos/oneplus/foldersync.config";
             Properties prop = new Properties();
+            java.io.File configFile = new java.io.File(configFilePath);
+            if (!configFile.exists()) {
+                throw new FileNotFoundException(configFilePath);
+            }
             InputStream input = new FileInputStream(configFilePath);
             prop.load(input);
-            app.setCreateNewFolder(Optional.ofNullable((Boolean) prop.get("createNewFolder")).orElse(false));
+            app.setCreateNewFolder(Boolean.valueOf(Optional.ofNullable(prop.get("createNewFolder")).orElse("false").toString()));
             app.setVerbose(verbose);
             app.run(prop.get("sourceDirectory").toString(), prop.get("destinationDirectory").toString());
         } catch (ParseException e) {
@@ -42,7 +49,13 @@ public class App {
 
         Folder sourceFolder = new FolderImpl(sourceDir);
         Folder destinationFolder = new FolderImpl(destDir);
+        if (verbose) {
+            System.out.println("Scanning files at " + sourceDir + "...");
+        }
         Collection<File> sourceFiles = sourceFolder.getFiles();
+        if (verbose) {
+            System.out.println("Scanning files at " + destDir + "...");
+        }
         Collection<File> destFiles = destinationFolder.getFiles();
 
         int initialSize = sourceFiles.size();
@@ -74,8 +87,12 @@ public class App {
         Folder newDestinationFolder = destinationFolder;
 
         if (createNewFolder) {
-            String folderName = new SimpleDateFormat("yyyy-mm-dd").format(new Date());
+            String folderName = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
             newDestinationFolder = destinationFolder.getChildFolder(folderName);
+        }
+
+        if (verbose) {
+            System.out.println("Starts copying " + sourceFiles.size() + " to " + newDestinationFolder.getPath() + "...");
         }
 
         int count = 0;
