@@ -23,7 +23,12 @@ public class FolderImpl implements Folder {
 
     @Override
     public void copyFile(File file) throws IOException {
-        FileUtils.copyFileToDirectory(file.getFile(), folder);
+        String tempFile = folder.getPath() + java.io.File.separator + file.name + ".temp";
+        java.io.File tempF = new java.io.File(tempFile);
+        java.io.File destF = new java.io.File(folder.getPath() + java.io.File.separator + file.name);
+        FileUtils.deleteQuietly(tempF);
+        FileUtils.copyFile(file.getFile(), tempF);
+        FileUtils.moveFile(tempF, destF);
     }
 
     public Folder getChildFolder(String folderName) {
